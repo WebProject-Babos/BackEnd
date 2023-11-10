@@ -1,7 +1,7 @@
 package hub.babos.pkuweb.member.repository;
 
 import hub.babos.pkuweb.member.domain.Member;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import java.util.List;
 class MemberRepositoryTest {
 
     private final MemberRepository memberRepository;
+
 
     @Autowired
     MemberRepositoryTest(MemberRepository memberRepository) {
@@ -45,14 +46,14 @@ class MemberRepositoryTest {
 
         Member savedMember = memberRepository.save(member);
 
-        Assertions.assertThat(member.getId()).isEqualTo(savedMember.getId());
+        Assertions.assertEquals(member.getId(), savedMember.getId());
     }
 
     @Test
     @DisplayName("멤버 닉네임 조회 테스트")
     public void testFindByNickname() {
         createMembers();
-        List<Member> members = memberRepository.findByNickname("nickname2");
-        Assertions.assertThat(members.size()).isEqualTo(1);
+        Member member = memberRepository.findByNickname("nickname2");
+        Assertions.assertEquals(member.getNickname(), "nickname2");
     }
 }

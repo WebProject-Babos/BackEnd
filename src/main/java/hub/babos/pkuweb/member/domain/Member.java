@@ -14,14 +14,17 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String email;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String password;
 
     @Column(unique = true)
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType = RoleType.USER;
 
     @Builder
     public Member(Long id, String email, String password, String nickname) {
