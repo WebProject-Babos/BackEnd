@@ -10,10 +10,12 @@ import hub.babos.pkuweb.message.dto.MessagesResponse;
 import hub.babos.pkuweb.message.dto.NewMessageRequest;
 import hub.babos.pkuweb.message.repository.MessageRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
@@ -46,6 +48,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional
     public Long send(NewMessageRequest newMessageRequest, AuthInfo authInfo) {
         Member receiver = findMember(newMessageRequest.getReceiverId());
         Member sender = findMember(authInfo);
