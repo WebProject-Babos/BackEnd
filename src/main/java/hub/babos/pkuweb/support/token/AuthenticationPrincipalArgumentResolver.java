@@ -1,6 +1,6 @@
 package hub.babos.pkuweb.support.token;
 
-import hub.babos.pkuweb.auth.AuthInfo;
+import hub.babos.pkuweb.auth.dto.AuthInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -29,9 +29,8 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String token = AuthorizationExtractor.extractAccessToken(Objects.requireNonNull(request));
-        if (token == null) {
+        if (token == null)
             return new AuthInfo(null, null, null);
-        }
         return tokenManager.getParsedClaims(token);
     }
 }

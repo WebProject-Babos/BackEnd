@@ -1,6 +1,6 @@
 package hub.babos.pkuweb.support.token;
 
-import hub.babos.pkuweb.auth.AuthInfo;
+import hub.babos.pkuweb.auth.dto.AuthInfo;
 
 public interface TokenManager {
 

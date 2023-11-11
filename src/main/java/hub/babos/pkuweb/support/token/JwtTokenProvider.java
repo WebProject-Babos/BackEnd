@@ -1,6 +1,6 @@
 package hub.babos.pkuweb.support.token;
 
-import hub.babos.pkuweb.auth.AuthInfo;
+import hub.babos.pkuweb.auth.dto.AuthInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;

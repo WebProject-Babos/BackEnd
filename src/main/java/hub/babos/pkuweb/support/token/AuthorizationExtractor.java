@@ -34,7 +34,7 @@ public class AuthorizationExtractor {
     }
 
     private static boolean notStartWithBearerString(String string) {
-        return string.toLowerCase().startsWith(BEARER_TYPE.toLowerCase());
+        return !string.toLowerCase().startsWith(BEARER_TYPE.toLowerCase());
     }
 
     private static String extractAuthHeaderValue(String string) {

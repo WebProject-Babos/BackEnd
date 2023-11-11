@@ -16,6 +16,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private final TokenManager tokenManager;
 
+
     public AuthInterceptor(TokenManager tokenManager) {
         this.tokenManager = tokenManager;
     }

@@ -1,5 +1,6 @@
 package hub.babos.pkuweb.member.domain;
 
+import hub.babos.pkuweb.auth.service.PasswordManager;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,11 +27,16 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private RoleType roleType = RoleType.USER;
 
+
     @Builder
     public Member(Long id, String email, String password, String nickname) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+    }
+
+    public void encodePassword(PasswordManager passwordManager) {
+        this.password = passwordManager.encode(this.password);
     }
 }
