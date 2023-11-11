@@ -6,6 +6,7 @@ import hub.babos.pkuweb.message.dto.NewMessageRequest;
 
 public interface MessageService {
 
-    MessagesResponse findMyMessages(AuthInfo authInfo);
+    MessagesResponse findMyReceivedMessages(AuthInfo authInfo);
+    MessagesResponse findMySentMessages(AuthInfo authInfo);
     Long send(NewMessageRequest newMessageRequest, AuthInfo authInfo);
 }

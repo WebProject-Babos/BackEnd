@@ -20,8 +20,14 @@ public class MessageController {
     }
 
     @GetMapping("/me/receive")
-    public ResponseEntity<MessagesResponse> findMyMessages(@Login AuthInfo authInfo) {
-        MessagesResponse messagesResponse = messageService.findMyMessages(authInfo);
+    public ResponseEntity<MessagesResponse> findMyReceivedMessages(@Login AuthInfo authInfo) {
+        MessagesResponse messagesResponse = messageService.findMyReceivedMessages(authInfo);
+        return ResponseEntity.ok(messagesResponse);
+    }
+
+    @GetMapping("/me/send")
+    public ResponseEntity<MessagesResponse> findMySentMessages(@Login AuthInfo authInfo) {
+        MessagesResponse messagesResponse = messageService.findMySentMessages(authInfo);
         return ResponseEntity.ok(messagesResponse);
     }
 

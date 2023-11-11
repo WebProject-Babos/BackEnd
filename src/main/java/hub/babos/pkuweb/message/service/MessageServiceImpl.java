@@ -26,10 +26,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessagesResponse findMyMessages(AuthInfo authInfo) {
+    public MessagesResponse findMyReceivedMessages(AuthInfo authInfo) {
         Member member = findMember(authInfo);
 
         List<MessagesElementResponse> messages = messageRepository.findMessagesByReceiver(member)
+                .stream().map(MessagesElementResponse::from).toList();
+
+        return new MessagesResponse(messages);
+    }
+
+    @Override
+    public MessagesResponse findMySentMessages(AuthInfo authInfo) {
+        Member member = findMember(authInfo);
+
+        List<MessagesElementResponse> messages = messageRepository.findMessagesBySender(member)
                 .stream().map(MessagesElementResponse::from).toList();
 
         return new MessagesResponse(messages);
