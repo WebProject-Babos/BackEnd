@@ -9,4 +9,6 @@ public interface PostService {
     PostsResponse findAll();
 
     Long addPost(NewPostRequest newPostRequest, AuthInfo authInfo);
+
+    PostsResponse findMyPosts(AuthInfo authInfo);
 }

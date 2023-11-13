@@ -19,7 +19,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/post/{postId}/comments")
+    @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<Long> addComment(@PathVariable(name = "postId") Long postId,
                                            @RequestBody NewCommentRequest newCommentRequest,
                                            @Login AuthInfo authInfo) {
@@ -27,7 +27,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentId);
     }
 
-    @GetMapping("/post/{postId}/comments")
+    @GetMapping("/posts/{postId}/comments")
     public ResponseEntity<CommentsResponse> findComments(@PathVariable("postId") Long postId, @Login AuthInfo authInfo) {
         CommentsResponse commentsResponse = commentService.findComments(postId, authInfo);
         return ResponseEntity.ok(commentsResponse);

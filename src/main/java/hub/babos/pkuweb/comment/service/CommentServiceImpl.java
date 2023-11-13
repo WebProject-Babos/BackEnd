@@ -36,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentsResponse findComments(Long postId, AuthInfo authInfo) {
         List<Comment> comments = commentRepository.findCommentsByPostId(postId);
         List<CommentsElementResponse> responses = comments.stream()
-                .map(CommentsElementResponse::of)
+                .map(CommentsElementResponse::from)
                 .toList();
         return new CommentsResponse(responses);
     }

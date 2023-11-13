@@ -22,7 +22,7 @@ public class CommentsElementResponse {
         this.createdAt = createdAt;
     }
 
-    public static CommentsElementResponse of(Comment comment) {
+    public static CommentsElementResponse from(Comment comment) {
         return CommentsElementResponse.builder()
                 .id(comment.getId())
                 .nickname(comment.getMember().getNickname())

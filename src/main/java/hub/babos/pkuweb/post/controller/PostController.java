@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
@@ -30,5 +30,11 @@ public class PostController {
     public ResponseEntity<Long> addPost(@RequestBody NewPostRequest newPostRequest, @Login AuthInfo authInfo) {
         Long postId = postService.addPost(newPostRequest, authInfo);
         return ResponseEntity.status(HttpStatus.CREATED).body(postId);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<PostsResponse> findMyPosts(@Login AuthInfo authInfo) {
+        PostsResponse postsResponse = postService.findMyPosts(authInfo);
+        return ResponseEntity.ok(postsResponse);
     }
 }

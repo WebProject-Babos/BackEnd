@@ -18,13 +18,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PostServiceImpl implements PostService {
 
-    private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
 
 
-    public PostServiceImpl(PostRepository postRepository, MemberRepository memberRepository) {
-        this.postRepository = postRepository;
+    public PostServiceImpl(MemberRepository memberRepository, PostRepository postRepository) {
         this.memberRepository = memberRepository;
+        this.postRepository = postRepository;
     }
 
     @Override
@@ -55,5 +55,18 @@ public class PostServiceImpl implements PostService {
                 .content(newPostRequest.getContent())
                 .author(author)
                 .build();
+    }
+
+    @Override
+    public PostsResponse findMyPosts(AuthInfo authInfo) {
+        Member author = memberRepository.findById(authInfo.getId())
+                .orElseThrow(MemberNotFoundException::new);
+
+        List<PostsElementResponse> responses = postRepository.findByAuthor(author)
+                .stream()
+                .map(PostsElementResponse::from)
+                .toList();
+
+        return new PostsResponse(responses);
     }
 }

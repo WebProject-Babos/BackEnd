@@ -31,7 +31,7 @@ public class Post {
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "author", referencedColumnName = "id")
-    Member author;
+    private Member author;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
