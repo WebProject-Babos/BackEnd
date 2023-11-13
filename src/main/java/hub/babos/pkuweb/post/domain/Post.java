@@ -1,5 +1,6 @@
 package hub.babos.pkuweb.post.domain;
 
+import hub.babos.pkuweb.comment.domain.Comment;
 import hub.babos.pkuweb.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,6 +33,9 @@ public class Post {
     @JoinColumn(name = "author", referencedColumnName = "id")
     Member author;
 
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -38,10 +44,11 @@ public class Post {
 
 
     @Builder
-    public Post(Long id, String title, String content, Member author) {
+    public Post(Long id, String title, String content, Member author, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
+        this.comments = comments;
     }
 }
