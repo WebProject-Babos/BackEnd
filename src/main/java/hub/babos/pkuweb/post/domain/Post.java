@@ -51,4 +51,10 @@ public class Post {
         this.author = author;
         this.comments = comments;
     }
+
+    public int getCommentCount() {
+        if (comments == null)
+            return 0;
+        return comments.size();
+    }
 }
