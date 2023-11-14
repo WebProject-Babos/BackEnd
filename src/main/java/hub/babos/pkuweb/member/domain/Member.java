@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -38,5 +40,9 @@ public class Member {
 
     public void encodePassword(PasswordManager passwordManager) {
         this.password = passwordManager.encode(this.password);
+    }
+
+    public boolean hasId(Long memberId) {
+        return Objects.equals(this.id, memberId);
     }
 }

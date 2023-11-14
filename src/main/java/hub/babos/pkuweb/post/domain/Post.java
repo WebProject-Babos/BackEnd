@@ -1,6 +1,7 @@
 package hub.babos.pkuweb.post.domain;
 
 import hub.babos.pkuweb.comment.domain.Comment;
+import hub.babos.pkuweb.like.domain.PostLike;
 import hub.babos.pkuweb.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -33,6 +34,11 @@ public class Post {
     @JoinColumn(name = "author", referencedColumnName = "id")
     private Member author;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<PostLike> postLikes = new ArrayList<>();
+
+    private int likeCount = 0;
+
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
@@ -44,12 +50,22 @@ public class Post {
 
 
     @Builder
-    public Post(Long id, String title, String content, Member author, List<Comment> comments) {
+    public Post(Long id, String title, String content, Member author, List<PostLike> postLikes, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
+        this.postLikes = postLikes;
         this.comments = comments;
+    }
+
+    public void addPostLike(PostLike postLike) {
+        postLikes.add(postLike);
+    }
+
+    public void deletePostLike(PostLike postLike) {
+        postLikes.remove(postLike);
+        postLike.delete();
     }
 
     public int getCommentCount() {
