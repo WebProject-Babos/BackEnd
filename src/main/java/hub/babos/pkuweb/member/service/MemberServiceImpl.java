@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -25,7 +26,11 @@ public class MemberServiceImpl implements MemberService {
         Member member = signupRequestDto.toEntity();
         member.encodePassword(passwordManager);
 
-        memberRepository.save(member);
+        if (notExist(member))
+            memberRepository.save(member);
     }
 
+    private boolean notExist(Member member) {
+        return !memberRepository.existsByEmailAndPassword(member.getEmail(), member.getPassword());
+    }
 }
