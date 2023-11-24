@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentsResponse findComments(Long postId, AuthInfo authInfo) {
+    public CommentsResponse findComments(Long postId) {
         List<Comment> comments = commentRepository.findCommentsByPostId(postId);
         List<CommentsElementResponse> responses = comments.stream()
                 .map(CommentsElementResponse::from)
