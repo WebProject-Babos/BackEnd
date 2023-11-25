@@ -23,4 +23,16 @@ public class MemberController {
         memberService.signup(signupRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @GetMapping(value = "/signup/exists", params = "email")
+    public ResponseEntity<Boolean> validateUniqueEmail(@RequestParam String email) {
+        Boolean unique = memberService.validateUniqueEmail(email);
+        return ResponseEntity.ok(unique);
+    }
+
+    @GetMapping(value = "/signup/exists", params = "nickname")
+    public ResponseEntity<Boolean> validateUniqueNickname(@RequestParam String nickname) {
+        Boolean unique = memberService.validateUniqueNickname(nickname);
+        return ResponseEntity.ok(unique);
+    }
 }
