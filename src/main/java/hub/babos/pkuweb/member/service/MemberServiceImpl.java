@@ -24,13 +24,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void signup(SignupRequestDto signupRequestDto) {
+    public Long signup(SignupRequestDto signupRequestDto) {
         validate(signupRequestDto);
 
         Member member = signupRequestDto.toEntity();
         member.encodePassword(passwordManager);
 
-        memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+        return savedMember.getId();
     }
 
     @Override
