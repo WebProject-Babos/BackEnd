@@ -1,10 +1,17 @@
 package hub.babos.pkuweb.post.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class NewPostRequest {
 
-    private String title;
-    private String content;
+    private final String title;
+    private final String content;
+
+    @Builder
+    public NewPostRequest(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
