@@ -28,8 +28,8 @@ public class CommentController {
     }
 
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<CommentsResponse> findComments(@PathVariable("postId") Long postId, @Login AuthInfo authInfo) {
-        CommentsResponse commentsResponse = commentService.findComments(postId, authInfo);
+    public ResponseEntity<CommentsResponse> findComments(@PathVariable("postId") Long postId) {
+        CommentsResponse commentsResponse = commentService.findComments(postId);
         return ResponseEntity.ok(commentsResponse);
     }
 }
