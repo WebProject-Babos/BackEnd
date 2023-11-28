@@ -21,8 +21,12 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<PostsResponse> findAll() {
-        PostsResponse postsResponse = postService.findAll();
+    public ResponseEntity<PostsResponse> findAll(@Login AuthInfo authInfo) {
+        PostsResponse postsResponse;
+        if (authInfo.getId() != null)
+            postsResponse = postService.findAll(authInfo);
+        else
+            postsResponse = postService.findAll();
         return ResponseEntity.ok(postsResponse);
     }
 
