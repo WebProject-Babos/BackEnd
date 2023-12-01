@@ -2,7 +2,13 @@ package hub.babos.pkuweb.post.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import hub.babos.pkuweb.post.dto.NewPostRequest;
+import hub.babos.pkuweb.post.dto.PostsElementResponse;
+import hub.babos.pkuweb.post.dto.PostsResponse;
 import hub.babos.pkuweb.post.service.PostService;
 import hub.babos.pkuweb.support.AuthInterceptor;
 import hub.babos.pkuweb.support.token.AuthenticationPrincipalArgumentResolver;
@@ -20,6 +26,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,9 +53,43 @@ class PostControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final PostsElementResponse POSTS_ELEMENT_RESPONSE1 = PostsElementResponse.builder()
+            .id(1L)
+            .title("title1")
+            .content("content1")
+            .likeCount(0)
+            .commentCount(0)
+            .build();
+    private final PostsElementResponse POSTS_ELEMENT_RESPONSE2 = PostsElementResponse.builder()
+            .id(2L)
+            .title("title2")
+            .content("content2")
+            .likeCount(0)
+            .commentCount(0)
+            .build();
+
     @BeforeEach
     public void setup() throws Exception {
         Mockito.when(authInterceptor.preHandle(any(), any(), any())).thenReturn(true);
+    }
+
+    @Test
+    @DisplayName("권한 없이 모든 게시글 요청 시 게시글 목록 반환")
+    void findAll() throws Exception {
+        PostsElementResponse[] postsElementResponses = {POSTS_ELEMENT_RESPONSE1, POSTS_ELEMENT_RESPONSE2};
+        PostsResponse postsResponse = new PostsResponse(List.of(postsElementResponses));
+        Mockito.when(postService.findAll()).thenReturn(postsResponse);
+        Mockito.when(postService.findAll(any())).thenReturn(postsResponse);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/posts/all"))
+                .andExpect(status().isOk()).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        System.out.println(content);
+        JsonArray posts = JsonParser.parseString(content).getAsJsonObject().get("posts").getAsJsonArray();
+
+        Assertions.assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        Assertions.assertThat(posts.size()).isEqualTo(2);
     }
 
     @Test
@@ -98,6 +141,20 @@ class PostControllerTest {
                 .andExpect(status().isCreated()).andReturn();
 
         Assertions.assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @DisplayName("내가 쓴 글 조회 시, 200을 반환")
+    void findMyPosts() throws Exception {
+        PostsElementResponse[] postsElementResponses = {POSTS_ELEMENT_RESPONSE1, POSTS_ELEMENT_RESPONSE2};
+        PostsResponse postsResponse = new PostsResponse(List.of(postsElementResponses));
+        Mockito.when(postService.findMyPosts(any())).thenReturn(postsResponse);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/posts/me")
+                .header("Authorization", "any"))
+                .andExpect(status().isOk()).andReturn();
+
+        Assertions.assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     private String convertToJSONString(Object object) throws JsonProcessingException {

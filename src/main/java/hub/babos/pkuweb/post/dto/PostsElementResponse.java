@@ -15,7 +15,6 @@ public class PostsElementResponse {
     private final int likeCount;
     private final boolean liked;
 
-
     @Builder
     public PostsElementResponse(Long id, String title, String content, String nickname, int commentCount, int likeCount, boolean liked) {
         this.id = id;
