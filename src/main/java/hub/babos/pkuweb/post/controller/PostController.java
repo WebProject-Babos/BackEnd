@@ -5,6 +5,7 @@ import hub.babos.pkuweb.post.dto.NewPostRequest;
 import hub.babos.pkuweb.post.dto.PostsResponse;
 import hub.babos.pkuweb.post.service.PostService;
 import hub.babos.pkuweb.support.token.Login;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,17 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<PostsResponse> findAll() {
-        PostsResponse postsResponse = postService.findAll();
+    public ResponseEntity<PostsResponse> findAll(@Login AuthInfo authInfo) {
+        PostsResponse postsResponse;
+        if (authInfo.getId() != null)
+            postsResponse = postService.findAll(authInfo);
+        else
+            postsResponse = postService.findAll();
         return ResponseEntity.ok(postsResponse);
     }
 
     @PostMapping
-    public ResponseEntity<Long> addPost(@RequestBody NewPostRequest newPostRequest, @Login AuthInfo authInfo) {
+    public ResponseEntity<Long> addPost(@Valid @RequestBody NewPostRequest newPostRequest, @Login AuthInfo authInfo) {
         Long postId = postService.addPost(newPostRequest, authInfo);
         return ResponseEntity.status(HttpStatus.CREATED).body(postId);
     }
