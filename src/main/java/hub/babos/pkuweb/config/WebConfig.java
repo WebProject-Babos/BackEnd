@@ -33,6 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/refresh")
                 .excludePathPatterns("/posts/all")
+                .excludePathPatterns("/posts/{postId}")
                 .excludePathPatterns("/posts/{postId}/comments");
     }
 
