@@ -23,6 +23,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // OPTIONS 리퀘스트일시 토큰체크 안함
+        if (Objects.equals(request.getMethod(), "OPTIONS")) {
+            return true;
+        }
+
         if (notExistHeader(request)) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
