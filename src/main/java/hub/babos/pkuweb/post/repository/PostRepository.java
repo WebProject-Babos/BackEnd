@@ -12,6 +12,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByAuthor(Member author);
+    List<Post> findAllById(Long postId);
 
     @Transactional
     @Modifying(clearAutomatically = true)

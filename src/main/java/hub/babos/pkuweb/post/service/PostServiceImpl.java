@@ -91,4 +91,14 @@ public class PostServiceImpl implements PostService {
 
         return new PostsResponse(responses);
     }
+
+    @Override
+    public PostsResponse findAllById(Long postId) {
+        List<PostsElementResponse> postsElementResponses = postRepository.findAllById(postId)
+                .stream()
+                .map(PostsElementResponse::from)
+                .toList();
+
+        return new PostsResponse(postsElementResponses);
+    }
 }

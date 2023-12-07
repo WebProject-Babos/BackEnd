@@ -42,4 +42,10 @@ public class PostController {
         PostsResponse postsResponse = postService.findMyPosts(authInfo);
         return ResponseEntity.ok(postsResponse);
     }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostsResponse> findAllbyId(@PathVariable("postId") Long postId) {
+        PostsResponse postsResponse = postService.findAllById(postId);
+        return ResponseEntity.ok(postsResponse);
+    }
 }
