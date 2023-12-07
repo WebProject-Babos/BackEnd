@@ -44,7 +44,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostsResponse> findAllbyId(@PathVariable("postId") Long postId) {
+    public ResponseEntity<PostsResponse> findAllById(@PathVariable("postId") Long postId) {
         PostsResponse postsResponse = postService.findAllById(postId);
         return ResponseEntity.ok(postsResponse);
     }
