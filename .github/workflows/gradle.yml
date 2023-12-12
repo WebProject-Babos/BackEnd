@@ -18,7 +18,7 @@ permissions:
 
 env:
   AWS_REGION: ap-northeast-2
-  S3_BUCKET_NAME: my-s3-github-actions
+  S3_BUCKET_NAME: web-pku-bucket
   CODE_DEPLOY_APPLICATION_NAME: web-pku-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: web-pku-deploy-group
 
