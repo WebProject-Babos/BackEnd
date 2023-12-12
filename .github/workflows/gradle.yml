@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 env:
-  AWS_REGION: ap-northeast-2c
+  AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: web-pku-bucket
   CODE_DEPLOY_APPLICATION_NAME: web-pku-deploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: web-pku-deploy-group
