@@ -1,3 +1,3 @@
 ## Backend Project For PKU Web Course
 
-Hi there.
+This project is for PKU Web Course.
