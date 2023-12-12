@@ -19,7 +19,7 @@ permissions:
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: web-pku-bucket
-  CODE_DEPLOY_APPLICATION_NAME: web-pku-deploy
+  CODE_DEPLOY_APPLICATION_NAME: web-pku-deploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: web-pku-deploy-group
 
 jobs:
@@ -37,7 +37,6 @@ jobs:
     - run: touch ./src/main/resources/application.properties
     - run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.properties
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
       with:
         arguments: clean build -x test
     - name: Configure AWS credentials
