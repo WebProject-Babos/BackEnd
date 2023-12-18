@@ -20,7 +20,7 @@ public class LikeController {
         this.likeService = likeService;
     }
 
-    @GetMapping("/posts/{postId}/isLiked")
+    @GetMapping("/posts/{postId}/like")
     public ResponseEntity<PostLikeResponse> getLiked(@PathVariable("postId") Long postId, @Login AuthInfo authInfo) {
         PostLikeResponse response = likeService.getLiked(postId, authInfo);
         System.out.println("loggggggggg");
