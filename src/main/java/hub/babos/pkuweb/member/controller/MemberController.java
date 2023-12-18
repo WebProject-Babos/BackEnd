@@ -1,7 +1,10 @@
 package hub.babos.pkuweb.member.controller;
 
+import hub.babos.pkuweb.auth.dto.AuthInfo;
+import hub.babos.pkuweb.member.dto.MyInfoResponse;
 import hub.babos.pkuweb.member.dto.SignupRequestDto;
 import hub.babos.pkuweb.member.service.MemberService;
+import hub.babos.pkuweb.support.token.Login;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +37,11 @@ public class MemberController {
     public ResponseEntity<Boolean> validateUniqueNickname(@RequestParam String nickname) {
         Boolean unique = memberService.validateUniqueNickname(nickname);
         return ResponseEntity.ok(unique);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<MyInfoResponse> getMyInfo(@Login AuthInfo authInfo) {
+        MyInfoResponse response = memberService.getMyInfo(authInfo);
+        return ResponseEntity.ok(response);
     }
 }

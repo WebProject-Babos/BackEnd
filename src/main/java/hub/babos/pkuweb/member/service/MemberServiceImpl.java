@@ -1,9 +1,12 @@
 package hub.babos.pkuweb.member.service;
 
+import hub.babos.pkuweb.auth.dto.AuthInfo;
 import hub.babos.pkuweb.auth.service.PasswordManager;
 import hub.babos.pkuweb.exception.DuplicateEmailException;
 import hub.babos.pkuweb.exception.DuplicateNicknameException;
+import hub.babos.pkuweb.exception.MemberNotFoundException;
 import hub.babos.pkuweb.member.domain.Member;
+import hub.babos.pkuweb.member.dto.MyInfoResponse;
 import hub.babos.pkuweb.member.dto.SignupRequestDto;
 import hub.babos.pkuweb.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -49,5 +52,16 @@ public class MemberServiceImpl implements MemberService {
             throw new DuplicateEmailException();
         if (!validateUniqueNickname(signupRequestDto.getNickname()))
             throw new DuplicateNicknameException();
+    }
+
+    @Override
+    public MyInfoResponse getMyInfo(AuthInfo authInfo) {
+        Member member = memberRepository.findById(authInfo.getId())
+                .orElseThrow(MemberNotFoundException::new);
+
+        return MyInfoResponse.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .build();
     }
 }
