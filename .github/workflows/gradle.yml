@@ -21,7 +21,6 @@ env:
   S3_BUCKET_NAME: web-pku-bucket
   CODE_DEPLOY_APPLICATION_NAME: web-pku-deploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: web-pku-deploy-group
-  PROJECT_NAME: web-pku
 
 jobs:
   build:
@@ -63,7 +62,12 @@ jobs:
       
     # S3에 업로드
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+      run: |
+        aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+          --source .
 
     # Deploy
     - name: Deploy
@@ -73,5 +77,5 @@ jobs:
         --deployment-config-name CodeDeployDefault.AllAtOnce \
         --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
         --file-exists-behavior OVERWRITE \
-        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=/$PROJECT_NAME/$GITHUB_SHA.zip \
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip \
         --region ap-northeast-2 \
