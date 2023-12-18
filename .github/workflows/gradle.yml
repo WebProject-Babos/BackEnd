@@ -21,6 +21,7 @@ env:
   S3_BUCKET_NAME: web-pku-bucket
   CODE_DEPLOY_APPLICATION_NAME: web-pku-deploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: web-pku-deploy-group
+  PROJECT_NAME: web-pku
 
 jobs:
   build:
@@ -36,27 +37,41 @@ jobs:
         distribution: 'temurin'
     - run: touch ./src/main/resources/application.properties
     - run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.properties
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+      shell: bash
+      
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-      with:
-        arguments: clean build -x test
+      run: ./gradlew build -x test
+      shell: bash
+        
+    - name: Make zip file
+      run: zip -r ./$GITHUB_SHA.zip .
+      shell: bash
+    
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY_ID }}
         aws-region: ${{ env.AWS_REGION }}
-    - name: Upload to AWS S3
-      run: |
-        aws deploy push \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --ignore-hidden-files \
-          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
-          --source .
-    - name: Deploy to AWS EC2 from S3
+
+    # script files 복사
+    - name: Copy script
+      run: cp ./scripts/*.sh ./deploy
+      
+    # S3에 업로드
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+
+    # Deploy
+    - name: Deploy
       run: |
         aws deploy create-deployment \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
+        --application-name cicdtest-project \
+        --deployment-config-name CodeDeployDefault.AllAtOnce \
+        --deployment-group-name cicd-test-prod \
+        --file-exists-behavior OVERWRITE \
+        --s3-location bucket=project-bucket-v1,bundleType=zip,key=cicdtest/$GITHUB_SHA.zip \
+        --region ap-northeast-2 \
