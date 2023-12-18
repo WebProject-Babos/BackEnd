@@ -69,9 +69,9 @@ jobs:
     - name: Deploy
       run: |
         aws deploy create-deployment \
-        --application-name cicdtest-project \
+        --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
         --deployment-config-name CodeDeployDefault.AllAtOnce \
-        --deployment-group-name cicd-test-prod \
+        --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
         --file-exists-behavior OVERWRITE \
-        --s3-location bucket=project-bucket-v1,bundleType=zip,key=cicdtest/$GITHUB_SHA.zip \
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=/$PROJECT_NAME/$GITHUB_SHA.zip \
         --region ap-northeast-2 \
