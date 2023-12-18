@@ -4,7 +4,7 @@ import hub.babos.pkuweb.auth.dto.AuthInfo;
 import hub.babos.pkuweb.exception.MemberNotFoundException;
 import hub.babos.pkuweb.exception.PostNotFoundException;
 import hub.babos.pkuweb.like.domain.PostLike;
-import hub.babos.pkuweb.like.dto.PostLikeResonse;
+import hub.babos.pkuweb.like.dto.PostLikeResponse;
 import hub.babos.pkuweb.like.repository.PostLikeRepository;
 import hub.babos.pkuweb.member.domain.Member;
 import hub.babos.pkuweb.member.repository.MemberRepository;
@@ -31,7 +31,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     @Transactional
-    public PostLikeResonse likePost(Long postId, AuthInfo authInfo) {
+    public PostLikeResponse likePost(Long postId, AuthInfo authInfo) {
         Member member = memberRepository.findById(authInfo.getId())
                 .orElseThrow(MemberNotFoundException::new);
         Post post = postRepository.findById(postId)
@@ -40,8 +40,20 @@ public class LikeServiceImpl implements LikeService {
         int likeCount = findPostLike(post, member);
         boolean liked = postLikeRepository.existsByPostAndMember(post, member);
 
-        return PostLikeResonse.builder()
+        return PostLikeResponse.builder()
                 .likeCount(likeCount)
+                .isLiked(liked)
+                .build();
+    }
+
+    @Transactional
+    public PostLikeResponse getLiked(Long postId, AuthInfo authInfo) {
+        Member member = memberRepository.findById(authInfo.getId())
+                .orElseThrow(MemberNotFoundException::new);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+        boolean liked = postLikeRepository.existsByPostAndMember(post, member);
+        return PostLikeResponse.builder()
                 .isLiked(liked)
                 .build();
     }
