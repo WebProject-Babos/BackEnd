@@ -20,15 +20,17 @@ public class LikeController {
         this.likeService = likeService;
     }
 
+    @GetMapping("/posts/{postId}/like")
+    public ResponseEntity<PostLikeResponse> getLiked(@PathVariable("postId") Long postId, @Login AuthInfo authInfo) {
+        PostLikeResponse response = likeService.getLiked(postId, authInfo);
+        System.out.println("loggggggggg");
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/posts/{postId}/like")
     public ResponseEntity<PostLikeResponse> likePost(@PathVariable("postId") Long postId, @Login AuthInfo authInfo) {
         PostLikeResponse response = likeService.likePost(postId, authInfo);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/posts/{postId}/like")
-    public ResponseEntity<PostLikeResponse> getLiked(@PathVariable("postId") Long postId, @Login AuthInfo authInfo) {
-        PostLikeResponse response = likeService.getLiked(postId, authInfo);
-        return ResponseEntity.ok(response);
-    }
 }
