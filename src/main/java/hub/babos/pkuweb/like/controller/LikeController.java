@@ -26,7 +26,7 @@ public class LikeController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/posts/{postId}/isLiked")
+    @GetMapping("/posts/{postId}/like")
     public ResponseEntity<PostLikeResponse> getLiked(@PathVariable("postId") Long postId, @Login AuthInfo authInfo) {
         PostLikeResponse response = likeService.getLiked(postId, authInfo);
         return ResponseEntity.ok(response);
